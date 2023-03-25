@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Care Connect</title>
+    <link rel="stylesheet" type="text/css" href="home2Style.css">
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <!-- insert logo image here -->
+        <img src="Assets/OurLogo.png">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#About">About</a></li>
+          <li><a href="#">Login</a></li>
+          <li><a href="#Contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+        <div style="position: relative;">
+            <img src="Assets/R.jpg" alt="your-image" style="width:100%;">
+            <br>
+            <br>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; padding: 20px; margin-top: 0px;">
+                <h2 style="color:black"><b>Care Connect</b></h2>
+              </div>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 20px; margin-top: 60px;">
+              <h3><b>On Demand daycare solutions for busy parents</b></h3>
+            </div>
+          </div>
+          
+      <div class="signup-header">
+        <h2>Sign Up</h2>
+      </div>
+      <div class="buttons">
+        <button>Parents</button>
+        <button>Care Provider</button>
+      </div> 
+      <br>
+      <br>     
+      <section id="About">
+      <div class="banner">
+        <h1>About Us</h1>
+        <p>At Care Connect, we're dedicated to connecting parents to daycare providers in the city for on demand care services. We understand that emergencies happen, and we're here to make sure you have the support you need. Our app allows you to find a provider in your area, read reviews from other parents, and book on demand care for your child. With CareConnect, you can have peace of mind knowing that your child is in good hands.</p>
+      </div>
+    </section>
+      
+      <section class="get-in-touch" id="Contact">
+        <div class="contact-container">
+          <div class="company-info">
+            <ul>
+              <li><i class="fa fa-map-marker"></i>123 Main Street, Regina, SK S76 543</li>
+              <li><i class="fa fa-phone"></i>(123) 456-7890</li>
+              <li><i class="fa fa-envelope"></i>info@careconnect.com</li>
+            </ul>
+          </div>
+          <form class="contact-form" action="submit-form.php" method="post">
+            <h3>Get In Touch!</h3>
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+          </form>
+        </div>
+      </section>      
+    </main>
+    <footer>
+      <p style="text-align: center;">Copyright © Care Connect 2023</p>
+    </footer>
+  </body>
+</html>
