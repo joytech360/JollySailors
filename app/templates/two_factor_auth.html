@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <h3>Authentication Code</h3>
+        {{ wtf.quick_form(form) }}
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 logo_cont">
+        <img src="{{ url_for('brand_logo') }}" id="login_logo">
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+@media (max-width: 1023px){
+    .logo_cont {
+        display: none;
+    }
+}
+</style>
+{% endblock %}

@@ -66,6 +66,10 @@ class User(UserMixin, db.Model):
     def full_address(self):
         return f"{self.street}, {self.city} {self.province} {self.postal_code} {self.country}"
 
+    def is_daycare_admin(self):
+        is_daycare_admin = self.daycare_staff.filter(daycare_staff.c.user_id == self.id).count() > 0
+        return is_daycare_admin
+
 
 class Child(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -84,7 +88,7 @@ daycare_staff = db.Table('daycare_staff',
 
 class Daycare(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True)
+    name = db.Column(db.String(128), index=True)
     email = db.Column(db.String(64), index=True, unique=True)
     phone_no = db.Column(db.String(64))
     date_joined = db.Column(db.Date)
@@ -93,14 +97,21 @@ class Daycare(db.Model):
     province = db.Column(db.String(8))
     postal_code = db.Column(db.String(16))
     country = db.Column(db.String(32))
+    lat = db.Column(db.Numeric(10, 6))
+    lng = db.Column(db.Numeric(10, 6))
+    capacity = db.Column(db.Integer)
+    opening_time = db.Column(db.Time)
+    closing_time = db.Column(db.Time)
+    about = db.Column(db.String(1028))
+    profile_pic = db.Column(db.String(128))
 
     staffs = db.relationship(
         'User', secondary='daycare_staff',
-        backref=db.backref('daycare', lazy='dynamic'), lazy='dynamic'
+        backref=db.backref('daycare_staff', lazy='dynamic'), lazy='dynamic'
     )
 
     def full_address(self):
-        return f"{self.street}, {self.city} {self.province} {self.postal_code} {self.country}"
+        return f"{self.street}, {self.city} {self.province} {self.postal_code}"
 
 
 class DaycareStudent(db.Model):

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            {% for daycare in daycares %}
+            <div class="card">
+                <div class="card-body row">
+                    <div class="col-8">
+                        <h5 class="card-title">{{ daycare.name }}</h5>
+                        <div class="card-text">Type: {{ daycare.about }}</div>
+                        <div>Address: {{ daycare.full_address() }}</div>
+                        <div>Phone no.: {{ daycare.phone_no }}</div>
+                        <div>Timings: {% if daycare.opening_time %}{{ daycare.opening_time }} {% else %} 8:00 AM {% endif %} - {% if daycare.closing_time %}{{ daycare.closing_time }} {% else %} 5:00 PM {% endif %}</div>
+                        <a href="#" class="btn btn-primary">Message</a>
+                    </div>
+                    <div class="col-4">
+                        <img style="width: 100%" src="{% if daycare.profile_pic %}{{ daycare.profile_pic }}{% else %} {{ url_for('static', filename='house-heart.svg') }}{% endif %}" alt="Daycare Profile Pic">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-6">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<style>
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+{% endblock %}

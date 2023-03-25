@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="row">
+        <div class="12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to {{ daycare.name }}</h5>
+                    <img src="{{ daycare.profile_pic }}" alt="Daycare Profile Pic">
+                    <p class="card-text">{{ daycare.about }}</p>
+                    <p>Address: {{ daycare.full_address() }}</p>
+                    <p>Phone no.: {{ daycare.phone_no }}</p>
+                    <p>Timings: {{ daycare.opening_time }} - daycare.closing_time</p>
+                    <a href="#" class="btn btn-primary">Message</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+
+
+</style>
+{% endblock %}

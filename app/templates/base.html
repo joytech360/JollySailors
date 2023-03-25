@@ -1,0 +1,284 @@
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    {% if title %}
+    {{ title }}
+    {% else %}
+    Care Connect
+    {% endif %}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="border-bottom: 1px solid gray">
+  <div class="container">
+    <span><img alt="Brand" src="{{ url_for('brand_logo') }}" style="width:40px;border-radius: 6px;"></span>
+    <a class="navbar-brand" href="{{ url_for('index') }}">CareConnect</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      {% if current_user.is_anonymous %}
+            <ul class="navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a class="btn btn-outline-secondary" href="{{ url_for('login') }}">
+                        Login
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_daycare_admin() %}
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#">
+                        <i class="fas fa-user-shield"></i>
+                        Daycare
+                    </a>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav me-auto">
+                <li>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </li>
+            </ul>
+            {% endif %}
+            <ul class="navbar-nav d-flex">
+
+                <li class="nav-item">
+                    <a href="{{ url_for('register_daycare') }}" class="btn btn-outline-success">
+                        Register a Daycare
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{#{{ url_for('edit_profile') }}#}" class="btn btn-outline-success" title="Edit profile">
+                        <i class="fas fa-user-circle"></i>
+                        {{ current_user.name}}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-success" title="Log out">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Log out
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
+
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-dismissable fade-in {{ category }}" role="alert" style="text-align: center; z-index: 999; position: fixed; width: 100%;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+{#<div class="col-lg-12 col-md-12 col-sm-12">
+    <div id="loading_icon">
+        <img src="/static/loading.png">
+    </div>
+</div>#}
+
+
+{% block app_content %}
+
+{% endblock %}
+
+{% if current_user.is_authenticated %}
+<div class="modal fade" id="request_push_notification_modal" tabindex="-1" role="dialog" aria-labelledby="request_push_notification_modal_label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="request_push_notification_modal_label">Enable Notifications</h4>
+      </div>
+      <div class="modal-body">
+          <p>This app would like to request permission to show notifications on your device.</p>
+        <button class="btn btn-primary" id="enable_notification_btn">
+            <i class="fas fa-bell"></i>
+            Enable Notifications
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block styles %}
+<!-- Bootstrap CSS v5.2.1 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous">
+<link rel="shortcut icon" href="{{ url_for('brand_icon') }}">
+<link rel="icon" href="{{ url_for('brand_icon') }}">
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('brand_logo') }}) }}">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="{{ url_for('brand_logo') }}" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+<meta name="apple-mobile-web-app-title" content="Messenger App">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+{#{{ super() }}#}
+
+{% endblock %}
+{% block scripts %}
+<!-- Bootstrap JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+</script>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='register-service-worker.js') }}"></script>
+<script type="text/javascript">
+    {% if current_user.is_authenticated %}
+    registerServiceWorker(
+        "{{ url_for('sw') }}",
+        "{{config['VAPID_PUBLIC_KEY']}}",
+        {#"{{ url_for('create_push_subscription') }}",#}
+        "{{ csrf_token() }}"
+    );
+    {% endif %}
+</script>
+{{ super() }}
+
+<script>
+
+</script>
+<script>
+{#
+$(window).load(function() {
+    // Animate loader off screen
+    $("#loading_icon").fadeOut("fast");
+});
+window.onbeforeunload = beforeUnload;
+function beforeUnload() {
+    $("#loading_icon").css('display', 'block')
+}
+#}
+
+$(document).ready(function() {
+    var csrf_token = "{{ csrf_token() }}";
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        }
+    });
+
+    $('input[type=submit]').removeClass('btn-default').addClass('btn-primary');
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    $("body").popover({ selector: '[data-toggle=popover]' });
+
+    if (Notification.permission === 'default'){
+        $('#request_push_notification_modal').modal('show');
+    }
+
+});
+
+function requestNotificationPermission() {
+    function handlePermission(permission) {
+        // Whatever the user answers, we make sure Chrome stores the information
+        if (!('permission' in Notification)) {
+            Notification.permission = permission;
+        }
+        if ($('#request_push_notification_modal').hasClass('in')){
+            $('#request_push_notification_modal').modal('hide')
+        }
+    }
+
+    if (!"Notification" in window) {
+            console.log("This browser does not support notifications.");
+    } else {
+        if (checkNotificationPromise()) {
+            Notification.requestPermission()
+                .then((permission) => {
+                    handlePermission(permission);
+                    permissionNotification(permission);
+                })
+        } else {
+            Notification.requestPermission(function (permission) {
+                handlePermission(permission);
+                permissionNotification(permission);
+            });
+        }
+    }
+}
+
+function permissionNotification(permission) {
+    if (permission == 'granted') {
+        var title = 'Thank you! Device notifications are now enabled'
+        var options = {
+            body: 'You can also enable/disable the notifications by clicking the icon before ' +
+                '"{#{{ url_for('edit_profile', _external=True) }}#}" at the browser tab at the top.',
+            icon: 'static/transparent_logo.ico',
+        }
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+            reg.showNotification(title, options);
+        });
+        if ($('#push_notification_btn')){
+
+            $('#push_notification_btn').removeClass()
+            $('#push_notification_btn').html('')
+            $('#push_notification_btn').addClass('btn btn-success')
+            $('#push_notification_btn').html('<i class="fas fa-bell"></i> Notifications Enabled')
+        }
+
+    } else if (permission == 'denied') {
+        alert('Device notifications disabled!')
+        if ($('#push_notification_btn')) {
+            $('#push_notification_btn').removeClass()
+            $('#push_notification_btn').html('')
+            $('#push_notification_btn').addClass('btn btn-warning')
+            $('#push_notification_btn').html('<i class="fas fa-bell"></i> Notifications Disabled')
+        }
+    }
+}
+
+if ('permissions' in Notification) {
+    const permission = Notification.permission
+    console.log(permission)
+    permission.onchange = function () {
+      permissionNotification(permission)
+    };
+}
+
+
+$('#enable_notification_btn').click(requestNotificationPermission)
+
+function checkNotificationPromise() {
+    try {
+      Notification.requestPermission().then();
+    } catch(e) {
+      return false;
+    }
+    return true;
+  }
+</script>
+{% endblock %}
+</body>
+</html>

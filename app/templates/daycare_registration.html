@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-3 co-sm-12 col-xs-12 login_form_cont mt-2">
+            <h3>Register a Daycare</h3>
+			  {{ wtf.quick_form(form)}}
+
+        </div>
+
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <img src="{{ url_for('brand_logo') }}" id="login_logo">
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+#login_logo {
+    width: 40vw;
+}
+
+@media screen and (max-width: 1000px) {
+
+    #login_logo {
+        display: none;
+    }
+
+}
+
+</style>
+{% endblock %}

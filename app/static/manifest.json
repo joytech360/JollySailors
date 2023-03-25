@@ -1,0 +1,17 @@
+{
+  "name": "CareConnect",
+  "short_name": "CareConnect",
+  "theme_color": "#000000",
+  "background_color": "#002bff",
+  "icons": [
+    {
+        "src": "/static/brand_logo.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

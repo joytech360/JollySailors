@@ -1,0 +1,14 @@
+<p>Dear {{ name }},</p>
+<p>
+    Please confirm your account by entering this code on the specified field.
+    {#<a href="{{ url_for('register_user', token=token, _external=True) }}">
+        clicking this link.
+    </a>.#}
+</p>
+<h4>Authentication code = <span style="color: #002bff">{{ two_factor_auth_code }}</span></h4>
+<p>This code is only valid for 10 minutes.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('register_user', token=token, _external=True) }}</p>
+<p>If you have not registered for the Training and Development app, simply ignore this message.</p>
+<p>Sincerely,</p>
+<p>CareConnect App</p>
