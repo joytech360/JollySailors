@@ -3,8 +3,8 @@ import random
 import jwt
 
 from flask import render_template, url_for, flash, redirect, request
-from app.forms import LoginForm, RegistrationForm, TwoFactorAuthForm, DaycareRegistrationForm
-from app.models import User, Daycare, Child, DaycareStudent
+from app.forms import LoginForm, RegistrationForm, TwoFactorAuthForm, DaycareRegistrationForm, AddChildForm, ChildRequestForm
+from app.models import User, Daycare, Child, DaycareStudent, ChildRequest
 from app.email import send_registration_confirmation_email, email_user
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFError
@@ -47,9 +47,14 @@ def brand_icon():
 
 
 @app.route('/')
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
+
+
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return redirect(url_for('parent'))#render_template('index.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -70,6 +75,7 @@ def register():
             app.config['SECRET_KEY'], algorithm='HS256')#.decode('utf-8')
         send_registration_confirmation_email(reg_form.email.data.lower(), reg_form.name.data, token,
                                              two_factor_auth_code)
+        print(two_factor_auth_code)
         flash('Please check your email to confirm your account.', 'alert-info')
         return redirect(url_for('register_user_2fa', token=token))
     return render_template('register.html', reg_form=reg_form)
@@ -131,6 +137,8 @@ def register_user(token):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter(func.lower(User.email) == form.email.data.replace(' ', '').lower()).first()
@@ -172,16 +180,34 @@ def register_daycare():
                           )
         db.session.add(daycare)
         db.session.commit()
+        daycare.staffs.append(current_user)
+        db.session.commit()
         flash(f'{daycare.name} has been registered')
         return redirect(url_for('daycare', id=daycare.id, name=daycare.name))
     return render_template('daycare_registration.html', form=form)
 
 
-@app.route('/daycare/<int:id>/<string:name>')
+@app.route('/my_daycare')
+@login_required
+def my_daycare():
+    daycare = current_user.my_daycare()
+    return render_template('daycare.html', daycare=daycare)
+
+
+@app.route('/daycare/<int:id>/<string:name>', methods=['GET', 'POST'])
 @login_required
 def daycare(id: int, name: str):
     daycare = Daycare.query.get(id)
-    return render_template('daycare.html', daycare=daycare)
+    form = ChildRequestForm()
+    form.child.choices = [(0, 'Select Child')] + [(i.id, f"{i.name}") for i in current_user.children]
+    if form.validate_on_submit():
+        child_request = ChildRequest(daycare_id=daycare.id,
+                                     child_id=form.child.data,
+                                     message=form.message.data)
+        db.session.add(child_request)
+        db.session.commit()
+        flash('Child request has been submitted', 'alert-info')
+    return render_template('daycare.html', daycare=daycare, form=form)
 
 
 @app.route('/daycare_registry')
@@ -212,3 +238,48 @@ def upload_centres():
             db.session.commit()
         except:
             pass
+
+
+@app.route('/parent', methods=['GET', 'POST'])
+@login_required
+def parent():
+    form = AddChildForm()
+    if form.validate_on_submit():
+        child = Child(name=form.name.data,
+                      birth_date=form.dob.data,
+                      parent_id=current_user.id)
+        db.session.add(child)
+        db.session.commit()
+        flash(f'Child {child.name} has been added', 'alert-info')
+    return render_template('parent.html', form=form)
+
+#
+# @app.route('/add_child_request/<int:id>/<string:name>')
+# @login_required
+# def add_child_request(id: int, name: str):
+#     daycare = Daycare.query.get(id)
+#     form = ChildRequestForm()
+#     form.child.choices = [(0, 'Select Child')] + [(i.id, f"{i.name}") for i in current_user.children]
+#     if form.validate_on_submit():
+#         child_request = ChildRequest(daycare_id=daycare.id,
+#                                      child_id=form.child.id,
+#                                      message=form.message.data)
+#         db.session.add(child_request)
+#         db.session.commit()
+#     return render_template('add_child_request.html', form=form)
+
+
+@app.route('/approve_child_request/<int:daycare_id>/<int:child_id>', methods=['GET', 'POST'])
+@login_required
+def approve_child_request(daycare_id: int, child_id: int):
+    daycare = Daycare.query.get(daycare_id)
+    child = Child.query.get(child_id)
+    child = DaycareStudent(daycare_id=daycare_id, child_id=child_id, date_joined=datetime.now())
+    db.session.add(child)
+    db.session.commit()
+    daycare_requests = ChildRequest.query.filter_by(child_id=child.id).all()
+    for daycare in daycare_requests:
+        db.session.delete(daycare)
+        db.session.commit()
+    flash(f'Child {child.child.name} has been accepted', 'alert-info')
+    return redirect(url_for('daycare', id=daycare.id, name=daycare.name))

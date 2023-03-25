@@ -6,7 +6,7 @@ from sqlalchemy import func
 from app import app
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField, SelectField, HiddenField, IntegerField, TimeField, FileField
+    TextAreaField, SelectField, HiddenField, IntegerField, TimeField, FileField, DateField
 from wtforms.validators import DataRequired, InputRequired, ValidationError, Email, EqualTo
 
 from app.models import User
@@ -113,4 +113,16 @@ class DaycareRegistrationForm(FlaskForm):
     opening_time = TimeField('Opening Time')
     closing_time = TimeField('Closing Time')
     profile_pic = FileField('Profile Picture')
+    submit = SubmitField('Submit')
+
+
+class AddChildForm(FlaskForm):
+    name = StringField('Child name', validators=[DataRequired()])
+    dob = DateField('Date of Birth', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class ChildRequestForm(FlaskForm):
+    child = SelectField('Child name', coerce=int, validators=[DataRequired(), validate_select])
+    message = TextAreaField('Message')
     submit = SubmitField('Submit')

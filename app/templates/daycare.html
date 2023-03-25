@@ -6,25 +6,93 @@
         <div class="12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Welcome to {{ daycare.name }}</h5>
-                    <img src="{{ daycare.profile_pic }}" alt="Daycare Profile Pic">
-                    <p class="card-text">{{ daycare.about }}</p>
+                    <h2 class="card-title text-center">Welcome to {{ daycare.name }}</h2>
+{#                    <img style="width: 100%;max-height: 80vh;" src="{% if daycare.profile_pic %}{{ daycare.profile_pic }}{% else %} {{ url_for('static', filename='house-heart.svg') }}{% endif %}" alt="Daycare Profile Pic">#}
+                    <p class="card-text">Type: {{ daycare.about }}</p>
                     <p>Address: {{ daycare.full_address() }}</p>
                     <p>Phone no.: {{ daycare.phone_no }}</p>
-                    <p>Timings: {{ daycare.opening_time }} - daycare.closing_time</p>
-                    <a href="#" class="btn btn-primary">Message</a>
+                    <p>Timings: {% if daycare.opening_time %}{{ daycare.opening_time }} {% else %} 8:00 AM {% endif %} - {% if daycare.closing_time %}{{ daycare.closing_time }} {% else %} 5:00 PM {% endif %}</p>
+{#                    <a href="{{ url_for('add_child_request', id=daycare.id, name=daycare.name) }}" class="btn btn-primary">Request to add child</a>#}
                 </div>
             </div>
         </div>
     </div>
+    {% if current_user.is_daycare_admin() and current_user.my_daycare() == daycare %}
+    <div class="row">
+        <div class="col-12">
+            <h3>Children</h3>
+            <div id="tableCont"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3>Child Requests</h3>
+            <div id="childRequestCont"></div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row mt-3">
+        <div class="col-6">
+            <h3>Request to add child</h3>
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
 
 {% block styles %}
 {{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 <style>
-
-
 </style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+<script>
+var children = []
+{% for child in daycare.children %}
+    children.push(["{{ child.child.name }}",
+                "{{ child.child.birth_date.strftime('%b %d, %y') }}",
+                "{{ child.child.parent.name }}",
+                window.gridjs.html(
+                  "<a class='btn btn-primary' href='{{ url_for('approve_child_request', daycare_id=daycare.id, child_id=child.child.id) }}'>" +
+                    "Remove" +
+                  "</a>"
+                )])
+{% endfor %}
+
+var childRrequests = []
+{% for request in daycare.children_requests %}
+    childRrequests.push(["{{ request.child.name }}",
+        "{{ request.child.birth_date.strftime('%b %d, %y') }}",
+        "{{ request.child.parent.name }}",
+        "{{ request.message }}",
+        window.gridjs.html(
+          "<a class='btn btn-primary' href='{{ url_for('approve_child_request', daycare_id=daycare.id, child_id=request.child.id) }}'>" +
+            "Approve" +
+          "</a>"
+        )
+    ])
+{% endfor %}
+
+
+new window.gridjs.Grid({
+  columns: ["Name", "Birth Date", "Parent", "Action"],
+  data: children
+}).render(document.getElementById("tableCont"));
+
+new window.gridjs.Grid({
+  columns: ["Name",
+            "Birth Date",
+            "Parent",
+            "Message",
+            "Action"],
+  data: childRrequests
+}).render(document.getElementById("childRequestCont"));
+</script>
 {% endblock %}

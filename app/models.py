@@ -70,6 +70,10 @@ class User(UserMixin, db.Model):
         is_daycare_admin = self.daycare_staff.filter(daycare_staff.c.user_id == self.id).count() > 0
         return is_daycare_admin
 
+    def my_daycare(self):
+        daycare = self.daycare_staff.first()
+        return daycare
+
 
 class Child(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,6 +82,12 @@ class Child(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     parent = db.relationship('User', backref=db.backref('children', lazy='dynamic'))
+
+    def current_daycare(self):
+        daycare = DaycareStudent.query.filter_by(child_id=self.id, date_left=None).first()
+        if daycare:
+            return daycare.daycare
+        return 'No Daycare Linked'
 
 
 daycare_staff = db.Table('daycare_staff',
@@ -113,6 +123,10 @@ class Daycare(db.Model):
     def full_address(self):
         return f"{self.street}, {self.city} {self.province} {self.postal_code}"
 
+    def student_count(self):
+        student_count = DaycareStudent.query.filter_by(daycare_id=self.id, date_left=None).count()
+        return student_count
+
 
 class DaycareStudent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -121,5 +135,17 @@ class DaycareStudent(db.Model):
     date_joined = db.Column(db.Date)
     date_left = db.Column(db.Date)
 
+    daycare = db.relationship('Daycare', backref=db.backref('children', lazy='dynamic'))
+    child = db.relationship('Child', backref=db.backref('daycare', lazy='dynamic'))
 
+
+class ChildRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    daycare_id = db.Column(db.Integer, db.ForeignKey('daycare.id'))
+    child_id = db.Column(db.Integer, db.ForeignKey('child.id'))
+    date_requested = db.Column(db.Date)
+    message = db.Column(db.String(512))
+
+    daycare = db.relationship('Daycare', backref=db.backref('children_requests', lazy='dynamic'))
+    child = db.relationship('Child', backref=db.backref('daycare_requests', lazy='dynamic'))
 

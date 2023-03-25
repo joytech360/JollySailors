@@ -1,0 +1,223 @@
+/* Global styles */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Header styles */
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+  }
+
+  .logo img {
+    max-height: 40px;
+  }
+
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  nav li {
+    margin-right: 20px;
+  }
+
+  nav li:last-child {
+    margin-right: 0;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  nav a:hover {
+    color: #ff8c00;
+  }
+
+  /* Main styles */
+
+  .image-message {
+    position: relative;
+  }
+
+  .image-message img {
+    width: 100%;
+    height: auto;
+  }
+
+  .image-message .message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+  }
+
+  .signup-header {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px 20px;
+  }
+
+  .signup-header h2 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+    color: #333333;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .buttons a {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(to right, #ff9966, #ff5e62);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .banner {
+    position: relative;
+    height: 300px;
+    background: linear-gradient(to right, #ff9966, #ff5e62);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+
+  .banner h1 {
+    font-size: 48px;
+    margin: 0;
+  }
+
+  .banner p {
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+
+  }
+
+  .message-container {
+    position: relative;
+    height: 100%;
+  }
+
+  .message {
+    position: absolute;
+    z-index: 2;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+
+  }
+
+  .contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    background-image: url("Assets/contact-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:black;
+  }
+
+  .company-info {
+    flex-basis: 40%;
+    margin-right: 50px;
+  }
+
+  .company-info h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .company-info ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .company-info li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .contact-form {
+    flex-basis: 55%;
+  }
+
+  .contact-form h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .contact-form textarea {
+    height: 150px;
+  }
+
+  .contact-form button[type="submit"] {
+    background-color: lightcoral;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .contact-form button[type="submit"]:hover {
+    background-color: #148f77;
+  }
+
+  .contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
