@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>Name: {{ current_user.name }}</h3>
+            <p>Address: {{ current_user.full_address() }}</p>
+            <p>Phone no: {{ current_user.phone_no }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <h4>Children</h4>
+            <div id="childrenContainer"></div>
+            {#{% for child in current_user.children %}
+            <div class="col-12">
+                <div>Name: {{ child.name }}</div>
+                <div>DOB: {{ child.birth_date.strftime('%b %d, %y') }}</div>
+            </div>
+            {% endfor %}#}
+        </div>
+        <div class="col-4">
+            <h3>Add Child Form</h3>
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<style>
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+<script>
+var children = []
+{% for child in current_user.children %}
+    children.push(["{{ child.name }}", "{{ child.birth_date.strftime('%b %d, %y') }}", "{{ child.current_daycare().name }}"])
+{% endfor %}
+
+
+new window.gridjs.Grid({
+  columns: ["Name", "Birth Date", "Daycare"],
+  data: children
+}).render(document.getElementById("childrenContainer"));
+</script>
+{% endblock %}
