@@ -156,7 +156,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/register_daycare')
+@app.route('/register_daycare', methods=['GET', 'POST'])
 @login_required
 def register_daycare():
     form = DaycareRegistrationForm()
