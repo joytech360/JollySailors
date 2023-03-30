@@ -64,20 +64,26 @@ def register():
 
     reg_form = RegistrationForm()
     if reg_form.validate_on_submit():
-        two_factor_auth_code = random.randint(10 ** (6 - 1), (10 ** 6) - 1)
-        token = jwt.encode({
-            'data': {'name': reg_form.name.data,
-                     'email': reg_form.email.data.lower().replace(' ', ''),
-                     'password': reg_form.password.data,
-                     'two_factor_auth_code': two_factor_auth_code
-                     },
-             'exp': ttime() + 600}, #expires in 600 secs
-            app.config['SECRET_KEY'], algorithm='HS256')#.decode('utf-8')
-        send_registration_confirmation_email(reg_form.email.data.lower(), reg_form.name.data, token,
-                                             two_factor_auth_code)
-        print(two_factor_auth_code)
-        flash('Please check your email to confirm your account.', 'alert-info')
-        return redirect(url_for('register_user_2fa', token=token))
+        user = User(username=reg_form.name.data, email=reg_form.email.data)
+        user.set_password(reg_form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+        # two_factor_auth_code = random.randint(10 ** (6 - 1), (10 ** 6) - 1)
+        # token = jwt.encode({
+        #     'data': {'name': reg_form.name.data,
+        #              'email': reg_form.email.data.lower().replace(' ', ''),
+        #              'password': reg_form.password.data,
+        #              'two_factor_auth_code': two_factor_auth_code
+        #              },
+        #      'exp': ttime() + 600}, #expires in 600 secs
+        #     app.config['SECRET_KEY'], algorithm='HS256')#.decode('utf-8')
+        # send_registration_confirmation_email(reg_form.email.data.lower(), reg_form.name.data, token,
+        #                                      two_factor_auth_code)
+        # print(two_factor_auth_code)
+        # flash('Please check your email to confirm your account.', 'alert-info')
+        # return redirect(url_for('register_user_2fa', token=token))
     return render_template('register.html', reg_form=reg_form)
 
 
