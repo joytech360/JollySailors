@@ -155,7 +155,10 @@ integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/j
 integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
 </script>
 <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+<!-- Broken code
 <script type="text/javascript" src="{{ url_for('static', filename='register-service-worker.js') }}"></script>
+
 <script type="text/javascript">
     {% if current_user.is_authenticated %}
     registerServiceWorker(
@@ -166,6 +169,8 @@ integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6
     );
     {% endif %}
 </script>
+-->
+
 {{ super() }}
 
 <script>
