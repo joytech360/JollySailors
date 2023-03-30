@@ -61,32 +61,20 @@ def index():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-
     reg_form = RegistrationForm()
     if reg_form.validate_on_submit():
-        user = User(username=reg_form.name.data, email=reg_form.email.data)
+        email=reg_form.email.data.lower().replace(' ', '')
+        user_q = User.query.filter(func.lower(User.email) == email).all()
+        if user_q:
+            flash('The email is already in use!', 'alert-warning')
+            return redirect(url_for('login'))
+        user = User(name=reg_form.name.data, email=email)
         user.set_password(reg_form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash("Thank you for registering. You may now be able to log into your account.", 'alert-info')
         return redirect(url_for('login'))
-        # two_factor_auth_code = random.randint(10 ** (6 - 1), (10 ** 6) - 1)
-        # token = jwt.encode({
-        #     'data': {'name': reg_form.name.data,
-        #              'email': reg_form.email.data.lower().replace(' ', ''),
-        #              'password': reg_form.password.data,
-        #              'two_factor_auth_code': two_factor_auth_code
-        #              },
-        #      'exp': ttime() + 600}, #expires in 600 secs
-        #     app.config['SECRET_KEY'], algorithm='HS256')#.decode('utf-8')
-        # send_registration_confirmation_email(reg_form.email.data.lower(), reg_form.name.data, token,
-        #                                      two_factor_auth_code)
-        # print(two_factor_auth_code)
-        # flash('Please check your email to confirm your account.', 'alert-info')
-        # return redirect(url_for('register_user_2fa', token=token))
     return render_template('register.html', reg_form=reg_form)
-
-
 
 @app.route('/register_user/two_factor_authentication/<token>', methods=['GET', 'POST'])
 def register_user_2fa(token):
