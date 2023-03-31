@@ -4,9 +4,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h3>Name: {{ current_user.name }}</h3>
-            <p>Address: {{ current_user.full_address() }}</p>
-            <p>Phone no: {{ current_user.phone_no }}</p>
+            <h3>{{ current_user.name }}</h3>
+                {% if current_user.full_address() %}
+                    <p>Address: {{ current_user.full_address() }}</p>
+                {% endif %}
+                {% if current_user.phone_no %}
+                    <p>Phone no: {{ current_user.phone_no }}</p>
+                {% endif %}
         </div>
     </div>
     <div class="row">
