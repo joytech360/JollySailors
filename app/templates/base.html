@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg bg-body-tertiary" style="border-bottom: 1px solid gray">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
     <span><img alt="Brand" src="{{ url_for('brand_logo') }}" style="width:40px;border-radius: 6px;"></span>
     <a class="navbar-brand" href="{{ url_for('index') }}">CareConnect</a>
@@ -31,7 +31,7 @@
             {% if current_user.is_daycare_admin() %}
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="{{ url_for('my_daycare') }}" class="btn btn-outline-warning">
+                    <a href="{{ url_for('my_daycare') }}" class="btn btn-danger btn-sm">
                         <img src="{{ url_for('static', filename='house-heart.svg') }}" alt="">
                         My Daycare
                     </a>
@@ -40,31 +40,31 @@
             {% endif %}
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a href="{{ url_for('daycare_registry') }}"  class="btn btn-outline-warning">Daycare Registry</a>
+                    <a href="{{ url_for('daycare_registry') }}"  class="btn btn-danger btn-sm">Daycare Registry</a>
                 </li>
 {#                <li>#}
 {#                    <form class="d-flex" role="search">#}
 {#                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-{#                        <button class="btn btn-outline-warning" type="submit">Search</button>#}
+{#                        <button class="btn btn-danger btn-sm" type="submit">Search</button>#}
 {#                    </form>#}
 {#                </li>#}
             </ul>
 
             <ul class="navbar-nav d-flex">
 
-                <li class="nav-item">
-                    <a href="{{ url_for('register_daycare') }}" class="btn btn-outline-warning">
+                <li class="nav-item" style="margin-left:1em">
+                    <a href="{{ url_for('register_daycare') }}" class="btn btn-danger btn-sm">
                         Register a Daycare
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('parent') }}" class="btn btn-outline-warning" title="Edit profile">
+                <li class="nav-item" style="margin-left:1em">
+                    <a href="{{ url_for('parent') }}" class="btn btn-danger btn-sm" title="Edit profile">
                         <i class="fas fa-user-circle"></i>
                         {{ current_user.name}}
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('logout') }}" class="btn btn-outline-warning" title="Log out">
+                <li class="nav-item" style="margin-left:1em">
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm" title="Log out">
                         <i class="fas fa-sign-out-alt"></i>
                         Log out
                     </a>
