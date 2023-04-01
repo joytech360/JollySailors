@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
     province = db.Column(db.String(8))
     postal_code = db.Column(db.String(16))
     country = db.Column(db.String(32))
+    is_daycare_admin = db.Column(db.Boolean)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -66,7 +67,7 @@ class User(UserMixin, db.Model):
     def full_address(self):
         return f"{self.street}, {self.city} {self.province} {self.postal_code} {self.country}"
 
-    def is_daycare_admin(self):
+    def manages_daycares(self):
         is_daycare_admin = self.daycare_staff.filter(daycare_staff.c.user_id == self.id).count() > 0
         return is_daycare_admin
 
