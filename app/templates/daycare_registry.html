@@ -102,7 +102,7 @@ function setupMap() {
 
   {% for daycare in daycares %}
     {
-      name: "{{ daycare.name }}",
+      name: "{{ daycare.name|safe }}",
       pos: new google.maps.LatLng({{ daycare.lat }}, {{ daycare.lng }}),
       description: `<div class="col-8">
                     <h5 class="card-title">{{ daycare.name }}</h5>
