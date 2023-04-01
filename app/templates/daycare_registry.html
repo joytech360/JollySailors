@@ -8,6 +8,7 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
+          <button class="btn btn-primary btn-sm" onclick="popperOpen(true)">Map view</button>
             {% for daycare in daycares %}
             <div class="card" id="myul">
                 <div class="card-body row" id="list{{loop.index}}">
@@ -50,150 +51,82 @@
 <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
 <script src="{{ url_for('static', filename='map.js') }}"></script>
 
-
-
+<div id="popper" style="display:none;position:absolute;top:5vh;left:5vw;width:90vw;height:90vh;overflow:hidden;border:1px solid;z-index:1">
+  <div id="googleMap" style="width:100%;height:100%"></div>
+</div>
+<button id="popbut" class="btn btn-secondary btn-sm" style="display:none;position:absolute;top:5.5vh;left:45vw;z-index:2" onClick="popperOpen(false)">close</button>
 
 <script>
-    var map;
-    markers = [];
-jsondata = [
-{
-  "type":"Centre, Accepts infants 6 weeks - 18 months",
-  "name":"Regina Open Door Society Child Care Centre",
-  "address":"1855 Smith Street, Regina, SK, S4P 2N5 (Downtown)",
-  "phone":"306-545-3873",
-  "lat":50.449499,
-  "lng":-104.6148778
-},
-{
-  "type":"Centre",
-  "name":"YWCA Child Care Centre",
-  "address":"1940 McIntyre Street, Regina, SK, S4P 2R3 (Downtown)",
-  "phone":"306-525-2141",
-  "lat":50.4480557,
-  "lng":-104.6169768
-}
-]
+  function popperOpen(isOpen) {
+      if(isOpen) {
+          document.getElementById("popper").style.display = "block";
+          document.getElementById("popbut").style.display = "block";
+      }
+      else {
+          document.getElementById("popper").style.display = "none";
+          document.getElementById("popbut").style.display = "none";
+      }
+  }
 
-    function centerAt(i) {
-        console.log("trying to center at " + jsondata[i]);
-            map.setCenter({ lat: jsondata["lat"], lng: jsondata["lng"] });
-    }
-
-//        document.onmousedown = function (event) {
-//          if (!event) {event = window.event;}
-//          console.log("mousedown "+event.target, event);
-//          // Post the event object here.
-//        };
-    
-          function clicker(jsons) {
-
-//                map.setZoom(13);
-//                map.setCenter(this.getPosition());
-
-            console.log("clicker")
-//            console.log(jsons);
-            map.setCenter({ lat: jsons["lat"], lng: jsons["lng"] });
-              for(var i = 0; i < jsondata.length; i++) {
-                elem = document.getElementById("list" + i);
-                  elem.style.background = "white";
-              }
-              elem = document.getElementById("list" + jsons["index"]);
-              elem.scrollIntoView();
-              elem.style.background = "lightblue";
-          }
-          function setDaycareMarkers(map) {
-    // Adds markers to the map.
-    // Marker sizes are expressed as a Size of X,Y where the origin of the image
-    // (0,0) is located in the top left of the image.
-    // Origins, anchor positions and coordinates of the marker increase in the X
-    // direction to the right and in the Y direction down.
-    const image = {
-      url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-      // This marker is 20 pixels wide by 32 pixels high.
-      size: new google.maps.Size(20, 32),
-      // The origin for this image is (0, 0).
-      origin: new google.maps.Point(0, 0),
-      // The anchor for this image is the base of the flagpole at (0, 32).
-      anchor: new google.maps.Point(0, 32),
-    };
-    // Shapes define the clickable region of the icon. The type defines an HTML
-    // <area> element 'poly' which traces out a polygon as a series of X,Y points.
-    // The final coordinate closes the poly by connecting to the first coordinate.
-    const shape = {
-      coords: [1, 1, 1, 20, 18, 20, 18, 1],
-      type: "poly",
-    };
-
-    for (let i = 0; i < jsondata.length; i++) {
-        jsondata[i]["index"] = i;
-      const data = jsondata[i];
-
-      marker = new google.maps.Marker({
-        position: { lat: data["lat"], lng: data["lng"] },
-        map,
-        title: data["name"],
-        zIndex: i + 1,
+  function setupPoints(map, infos) {
+    for(let i = 0; i < infos.length; i++) {
+      const infoWindow = new google.maps.InfoWindow({
+        content: infos[i].description,
+        ariaLabel: infos[i].name,
       });
-        
-        marker.addListener("click", () => {
-            clicker(data);
+      const marker = new google.maps.Marker({
+        position: infos[i].pos,
+        map: map,
+        title: infos[i].name,
+      });
+      marker.addListener("click", () => {
+        infoWindow.open({
+          anchor: marker,
+          map,
         });
-        
-        markers[i] = marker;
+      });  
+      infos[i].marker = marker;
+      infos[i].infoWindow = infoWindow;
     }
   }
 
-  function initMap() {
-    console.log("in init map")
-    map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 15,
-      center: { lat: 50.4452, lng: -104.6189 },
-    });
-    
-    var marker = new google.maps.Marker({
-      position: { lat: 50.4452, lng: -104.6189 },
-      map: map,
-      icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
-    });
-    
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        
-        marker.setPosition(pos);
-        map.setCenter(pos);
-      }, function() {
-        handleLocationError(true, marker, map.getCenter());
-      });
-    } else {
-      handleLocationError(false, marker, map.getCenter());
-    }
-      
-      setDaycareMarkers(map);
-  }
-  
-  function handleLocationError(browserHasGeolocation, marker, pos) {
-    var infoWindow = new google.maps.InfoWindow({
-      map: map
-    });
-    
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
-                          'Error: The Geolocation service failed.' :
-                          'Error: Your browser doesn\'t support geolocation.');
-  }
-    function initAll(){
-      console.log("initting map")
-        initMap();
-    }
+function setupMap() {
+  let posRegina = new google.maps.LatLng(50.4452, -104.6189);
+  var mapProp= {
+    center: posRegina, // Regina
+    zoom:15,
+  };
+  var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+  let infos = [
+
+  {% for daycare in daycares %}
+    {
+      name: "{{ daycare.name }}",
+      pos: new google.maps.LatLng({{ daycare.lat }}, {{ daycare.lng }}),
+      description: `<div class="col-8">
+                    <h5 class="card-title">{{ daycare.name }}</h5>
+                    <div class="card-text">Type: {{ daycare.about }}</div>
+                    <div>Address: {{ daycare.full_address() }}</div>
+                    <div>Phone no.: {{ daycare.phone_no }}</div>
+                    <div>Timings: {% if daycare.opening_time %}{{ daycare.opening_time }} {% else %} 8:00 AM {% endif %} - {% if daycare.closing_time %}{{ daycare.closing_time }} {% else %} 5:00 PM {% endif %}</div>
+                    <div>Capacity: {{ daycare.capacity }}</div>
+                    <div>Current Students: {{ daycare.student_count() }}</div>
+                    <a href="{{ url_for('daycare', id=daycare.id, name=daycare.name) }}" class="btn btn-primary">See full info</a>
+       </div>`,
+    },
+/*      
+	      })}; */
+  {% endfor %}
+      ];
+
+  setupPoints(map, infos);
+}
+
+
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY3cTla3USGr3pChN0e9kqaJxcdtDPpsY&callback=initAll"></script>
 
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY3cTla3USGr3pChN0e9kqaJxcdtDPpsY&callback=setupMap"></script>
 
 
 {% endblock %}
