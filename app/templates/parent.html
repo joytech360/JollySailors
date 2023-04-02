@@ -13,22 +13,20 @@
                 {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-8">
-            <h4>Children</h4>
-            <div id="childrenContainer"></div>
-            {#{% for child in current_user.children %}
-            <div class="col-12">
-                <div>Name: {{ child.name }}</div>
-                <div>DOB: {{ child.birth_date.strftime('%b %d, %y') }}</div>
-            </div>
-            {% endfor %}#}
-        </div>
-        <div class="col-4">
-            <h3>Add Child Form</h3>
-            {{ wtf.quick_form(form) }}
-        </div>
+
+    <h4>Children</h4>
+    <div id="childrenContainer"></div>
+    {#{% for child in current_user.children %}
+    <div class="col-12">
+        <div>Name: {{ child.name }}</div>
+        <div>DOB: {{ child.birth_date.strftime('%b %d, %y') }}</div>
     </div>
+    {% endfor %}#}
+    <div style="margin-top:2em;max-width:20em">
+        <h4>Add Child Form</h4>
+        {{ wtf.quick_form(form) }}
+    </div>
+
 </div>
 
 {% endblock %}
