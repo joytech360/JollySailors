@@ -3,7 +3,7 @@ import random
 import jwt
 
 from flask import render_template, url_for, flash, redirect, request
-from app.forms import LoginForm, RegistrationForm, TwoFactorAuthForm, DaycareRegistrationForm, AddChildForm, ChildRequestForm
+from app.forms import LoginForm, RegistrationForm, AdminApplyForm, TwoFactorAuthForm, DaycareRegistrationForm, AddChildForm, ChildRequestForm
 from app.models import User, Daycare, Child, DaycareStudent, ChildRequest
 from app.email import send_registration_confirmation_email, email_user
 from flask_login import login_user, logout_user, login_required, current_user
@@ -80,20 +80,15 @@ def register():
 def admin_apply():
     if current_user.is_daycare_admin:
         return redirect(url_for('index'))
-    reg_form = RegistrationForm()
+    reg_form = AdminApplyForm()
     if reg_form.validate_on_submit():
-        email=reg_form.email.data.lower().replace(' ', '')
-        user_q = User.query.filter(func.lower(User.email) == email).all()
-        if user_q:
-            flash('The email is already in use!', 'alert-warning')
-            return redirect(url_for('login'))
-        user = User(name=reg_form.name.data, email=email)
-        user.set_password(reg_form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Thank you for registering. You may now be able to log into your account.", 'alert-info')
-        return redirect(url_for('login'))
-    return render_template('register.html', reg_form=reg_form)
+        #user = User(name=reg_form.name.data, email=email)
+        #user.set_password(reg_form.password.data)
+        #db.session.add(user)
+        #db.session.commit()
+        flash("Thank you for applying. You will be contacted shortly with more information.", 'alert-info')
+        return redirect(url_for('index'))
+    return render_template('admin_apply.html', reg_form=reg_form)
 
 @app.route('/register_user/two_factor_authentication/<token>', methods=['GET', 'POST'])
 def register_user_2fa(token):

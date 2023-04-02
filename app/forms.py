@@ -54,6 +54,12 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Password should have at least one special character!')
 
 
+
+class AdminApplyForm(FlaskForm):
+    name = StringField('Daycare name', validators=[DataRequired()])
+    submit = SubmitField('Apply', render_kw={'class': 'btn btn-primary mt-2'})
+
+
 class UpdatePasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()], render_kw={'autocomplete': 'off'})
     password2 = PasswordField(

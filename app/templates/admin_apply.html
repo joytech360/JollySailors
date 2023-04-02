@@ -4,23 +4,9 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-3 col-md-3 co-sm-12 col-xs-12 mt-2">
-            <h3>User Registration Form</h3>
+            <h3>Application to be a Childcare Provider</h3>
           <div>
             {{ wtf.quick_form(reg_form)}}
-              <h4>Password requirements!</h4>
-              <ul>
-                  <li>Password length should be at least 8 characters.</li>
-                  <li>Password should have at least:
-                      <ul>
-                          <li>One number</li>
-                          <li>One uppercase letter</li>
-                          <li>One lowercase letter</li>
-                          <li>One special character</li>
-                      </ul>
-              </ul>
-          </div>
-          <div style="margin-top: 20px;">
-              <a type="button" class="btn btn-primary" href="{{ url_for('login')}}">Already registered? Login!</a>
           </div>
         </div>
         <div class="col-lg-3 col-md-3">
