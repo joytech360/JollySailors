@@ -2,41 +2,33 @@
 
 {% block app_content %}
 <div class="container">
-    <div class="row">
-      <div class="col-sm">
-        
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-          <button class="btn btn-primary btn-sm" onclick="popperOpen(true)">Map view</button>
-            {% for daycare in daycares %}
-            <div class="card" id="myul">
-                <div class="card-body row" id="list{{loop.index}}">
-                    <div class="col-8">
-                        <h5 class="card-title">{{ daycare.name }}</h5>
-                        <div class="card-text">Type: {{ daycare.about }}</div>
-                        <div>Address: {{ daycare.full_address() }}</div>
-                        <div>Phone no.: {{ daycare.phone_no }}</div>
-                        <div>Timings: {% if daycare.opening_time %}{{ daycare.opening_time }} {% else %} 8:00 AM {% endif %} - {% if daycare.closing_time %}{{ daycare.closing_time }} {% else %} 5:00 PM {% endif %}</div>
-                        {% if daycare.capacity %}
-                          <div>Capacity: {{ daycare.capacity }}</div>
-                          <div>Current Students: {{ daycare.student_count() }}</div>
-                        {% endif %}
-                        <a href="{{ url_for('daycare', id=daycare.id, name=daycare.name) }}" class="btn btn-primary">See full info</a>
-                    </div>
-                    <div class="col-4">
-                        <img style="width: 100%" src="{% if daycare.profile_pic %}{{ daycare.profile_pic }}{% else %} {{ url_for('static', filename='house-heart.svg') }}{% endif %}" alt="Daycare Profile Pic">
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col-sm" style="max-width:30em">
+      <button class="btn btn-primary btn-sm" onclick="popperOpen(true)">Map view</button>
+      {% for daycare in daycares %}
+        <div class="card" id="myul">
+          <div class="card-body row" id="list{{loop.index}}">
+            <div class="col-8">
+              <h5 class="card-title">{{ daycare.name }}</h5>
+              <div class="card-text">Type: {{ daycare.about }}</div>
+              <div>Address: {{ daycare.full_address() }}</div>
+              <div>Phone no.: {{ daycare.phone_no }}</div>
+              <div>Timings: {% if daycare.opening_time %}{{ daycare.opening_time }} {% else %} 8:00 AM {% endif %} - {% if daycare.closing_time %}{{ daycare.closing_time }} {% else %} 5:00 PM {% endif %}</div>
+              {% if daycare.capacity %}
+                <div>Capacity: {{ daycare.capacity }}</div>
+                <div>Current Students: {{ daycare.student_count() }}</div>
+              {% endif %}
+              <a href="{{ url_for('daycare', id=daycare.id, name=daycare.name) }}" class="btn btn-primary">See full info</a>
             </div>
-            {% endfor %}
+            <div class="col-4">
+              <img style="width: 100%" src="{% if daycare.profile_pic %}{{ daycare.profile_pic }}{% else %} {{ url_for('static', filename='house-heart.svg') }}{% endif %}" alt="Daycare Profile Pic">
+            </div>
+          </div>
         </div>
-<!--          <div style="width:100%;height:90%;position:fixed;right:0;top:0;" id="map">
-            outer div
-          </div> -->
+      {% endfor %}
     </div>
+  </div>
 </div>
-
 {% endblock %}
 
 {% block styles %}
@@ -54,7 +46,7 @@
 <div id="popper" style="display:none;position:absolute;top:5vh;left:5vw;width:90vw;height:90vh;overflow:hidden;border:1px solid;z-index:1">
   <div id="googleMap" style="width:100%;height:100%"></div>
 </div>
-<button id="popbut" class="btn btn-secondary btn-sm" style="display:none;position:absolute;top:5.5vh;left:45vw;z-index:2" onClick="popperOpen(false)">close</button>
+<button id="popbut" class="btn btn-warning btn-sm" style="display:none;position:absolute;top:6vh;left:45vw;z-index:2;outline:1px solid;" onClick="popperOpen(false)">close</button>
 
 <script>
   function popperOpen(isOpen) {

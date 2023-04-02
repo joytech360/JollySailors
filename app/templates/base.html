@@ -31,14 +31,14 @@
             <ul class="navbar-nav">
             {% if current_user.is_daycare_admin %}
                 <li class="nav-item" style="margin-left:1em">
-                    <a href="{{ url_for('register_daycare') }}" class="btn btn-danger btn-sm">
+                    <a href="{{ url_for('register_daycare') }}" class="btn btn-success btn-sm">
                         Register a Daycare
                     </a>
                 </li>
             {% endif %}
             {% if current_user.manages_daycares() %}
                 <li class="nav-item" style="margin-left:1em">
-                    <a href="{{ url_for('my_daycare') }}" class="btn btn-danger btn-sm">
+                    <a href="{{ url_for('my_daycare') }}" class="btn btn-success btn-sm">
                         <img src="{{ url_for('static', filename='house-heart.svg') }}" alt="">
                         My Daycares
                     </a>
@@ -47,12 +47,12 @@
             </ul>
             <ul class="navbar-nav me-auto">
                 <li class="nav-item" style="margin-left:1em">
-                    <a href="{{ url_for('daycare_registry') }}"  class="btn btn-danger btn-sm">Find a Daycare</a>
+                    <a href="{{ url_for('daycare_registry') }}"  class="btn btn-success btn-sm">Find a Daycare</a>
                 </li>
 {#                <li>#}
 {#                    <form class="d-flex" role="search">#}
 {#                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-{#                        <button class="btn btn-danger btn-sm" type="submit">Search</button>#}
+{#                        <button class="btn btn-success btn-sm" type="submit">Search</button>#}
 {#                    </form>#}
 {#                </li>#}
             </ul>
@@ -60,13 +60,13 @@
             <ul class="navbar-nav d-flex">
 
                 <li class="nav-item" style="margin-left:1em">
-                    <a href="{{ url_for('parent') }}" class="btn btn-danger btn-sm" title="Edit profile">
+                    <a href="{{ url_for('parent') }}" class="btn btn-success btn-sm" title="Edit profile">
                         <i class="fas fa-user-circle"></i>
                         {{ current_user.name}}
                     </a>
                 </li>
                 <li class="nav-item" style="margin-left:1em">
-                    <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm" title="Log out">
+                    <a href="{{ url_for('logout') }}" class="btn btn-success btn-sm" title="Log out">
                         <i class="fas fa-sign-out-alt"></i>
                         Log out
                     </a>
