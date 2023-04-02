@@ -228,6 +228,9 @@ def daycare_registry():
 @app.route('/parent', methods=['GET', 'POST'])
 @login_required
 def parent():
+    daycare = None
+    if current_user.is_daycare_admin:
+        daycare = current_user.my_daycare()
     form = AddChildForm()
     if form.validate_on_submit():
         child = Child(name=form.name.data,
@@ -236,7 +239,7 @@ def parent():
         db.session.add(child)
         db.session.commit()
         flash(f'Child {child.name} has been added', 'alert-info')
-    return render_template('parent.html', form=form)
+    return render_template('parent.html', form=form, daycare=daycare)
 
 #
 # @app.route('/add_child_request/<int:id>/<string:name>')

@@ -29,15 +29,24 @@
         {% endif %}
         {% if current_user.is_authenticated %}
             <ul class="navbar-nav">
-                {% if current_user.is_daycare_admin %}
+                {% if current_user.is_daycare_admin %}                
                     <li class="nav-item" style="margin-left:1em">
                         <a href="{{ url_for('daycare_registry') }}"  class="btn btn-sm">Daycare List</a>
                     </li>
-                    <li class="nav-item" style="margin-left:1em">
-                        <a href="{{ url_for('register_daycare') }}" class="btn btn-sm">
-                            Register a Daycare
-                        </a>
-                    </li>
+                    {% if current_user.manages_daycares() %}
+                            <li class="nav-item" style="margin-left:1em">
+                            <a href="{{ url_for('my_daycare') }}" class="btn btn-sm">
+                                <img src="{{ url_for('static', filename='house-heart.svg') }}" alt="">
+                                My Daycare
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item" style="margin-left:1em">
+                            <a href="{{ url_for('register_daycare') }}" class="btn btn-sm">
+                                Register a Daycare
+                            </a>
+                        </li>
+                    {% endif %}
                 {% else %}
                     <li class="nav-item" style="margin-left:1em">
                         <a href="{{ url_for('daycare_registry') }}"  class="btn btn-sm">Find a Daycare</a>
@@ -45,14 +54,6 @@
                     <li class="nav-item" style="margin-left:1em">
                         <a href="{{ url_for('admin_apply') }}" class="btn btn-sm">
                             Apply to be a Provider
-                        </a>
-                    </li>
-                {% endif %}
-                {% if current_user.manages_daycares() %}
-                    <li class="nav-item" style="margin-left:1em">
-                        <a href="{{ url_for('my_daycare') }}" class="btn btn-sm">
-                            <img src="{{ url_for('static', filename='house-heart.svg') }}" alt="">
-                            My Daycares
                         </a>
                     </li>
                 {% endif %}
