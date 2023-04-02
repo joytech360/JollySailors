@@ -43,10 +43,10 @@
 <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
 <script src="{{ url_for('static', filename='map.js') }}"></script>
 
-<div id="popper" style="display:none;position:absolute;top:5vh;left:5vw;width:90vw;height:90vh;overflow:hidden;border:1px solid;z-index:1">
+<div id="popper" style="display:none;position:absolute;top:5vh;left:5vw;width:90vw;height:90vh;overflow:hidden;border:.15em solid;z-index:1">
   <div id="googleMap" style="width:100%;height:100%"></div>
 </div>
-<button id="popbut" class="btn btn-warning btn-sm" style="display:none;position:absolute;top:6vh;left:45vw;z-index:2;outline:1px solid;" onClick="popperOpen(false)">close</button>
+<button id="popbut" class="btn btn-warning btn-sm" style="display:none;position:absolute;top:6vh;left:45vw;z-index:2;outline:.15em solid;" onClick="popperOpen(false)">close</button>
 
 <script>
   function popperOpen(isOpen) {
