@@ -76,6 +76,25 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', reg_form=reg_form)
 
+@app.route('/admin_apply', methods=['GET', 'POST'])
+def admin_apply():
+    if current_user.is_daycare_admin:
+        return redirect(url_for('index'))
+    reg_form = RegistrationForm()
+    if reg_form.validate_on_submit():
+        email=reg_form.email.data.lower().replace(' ', '')
+        user_q = User.query.filter(func.lower(User.email) == email).all()
+        if user_q:
+            flash('The email is already in use!', 'alert-warning')
+            return redirect(url_for('login'))
+        user = User(name=reg_form.name.data, email=email)
+        user.set_password(reg_form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("Thank you for registering. You may now be able to log into your account.", 'alert-info')
+        return redirect(url_for('login'))
+    return render_template('register.html', reg_form=reg_form)
+
 @app.route('/register_user/two_factor_authentication/<token>', methods=['GET', 'POST'])
 def register_user_2fa(token):
     if current_user.is_authenticated:
