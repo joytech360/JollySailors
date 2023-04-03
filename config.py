@@ -15,3 +15,5 @@ class Config(object):
 	MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
 	ADMINS = os.getenv('ADMINS')
 	UPLOADED_PHOTOS_DEST = os.getcwd() + '/app/static/uploads'
+	RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+	RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')

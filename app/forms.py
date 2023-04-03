@@ -4,7 +4,7 @@ from string import punctuation
 from sqlalchemy import func
 
 from app import app
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, SelectField, HiddenField, IntegerField, TimeField, FileField, DateField
 from wtforms.validators import DataRequired, InputRequired, ValidationError, Email, EqualTo
@@ -24,6 +24,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()], render_kw={'autocomplete': 'off'})
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')], render_kw={'autocomplete': 'off'})
+    recaptcha = RecaptchaField()
     submit = SubmitField('Register', render_kw={'class': 'btn btn-primary mt-2'})
 
     def validate_email(self, email):

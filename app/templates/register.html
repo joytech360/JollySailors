@@ -2,8 +2,8 @@
 
 {% block app_content %}
 <div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-3 co-sm-12 col-xs-12 mt-2">
+    <div class="d-flex flex-row">
+        <div class="p-2" style="max-width:20em">
             <h3>User Registration Form</h3>
           <div>
             {{ wtf.quick_form(reg_form)}}
@@ -19,11 +19,11 @@
                       </ul>
               </ul>
           </div>
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 1em;">
               <a type="button" class="btn btn-primary" href="{{ url_for('login')}}">Already registered? Login!</a>
           </div>
         </div>
-        <div class="col-lg-3 col-md-3">
+        <div class="p-2">
           <img src="{{ url_for('brand_logo') }}" id="login_logo">
         </div>
     </div>
@@ -45,6 +45,8 @@
         display: none;
     }
 }
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
 </style>
 {% endblock %}
